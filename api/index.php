@@ -12,10 +12,18 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     // $response->getBody()->write("Hello");
     return $response->withJson(array(
         '/api/resident/login',
+
         '/api/files',
+
         '/api/files/archive',
+        '/api/files/archive/work-credit-submission',
+        '/api/files/archive/receipt-credit-submissions',
+        '/api/files/archive/meeting-minutes',
         '/api/files/forms',
-        '/api/files/documents'
+
+        '/api/files/documents',
+
+        '/api/forms/work/list'
     ));
 });
 

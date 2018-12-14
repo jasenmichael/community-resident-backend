@@ -22,7 +22,7 @@ api/
           work/
             list.php
             post.php
-            update.php ***
+            update.php
             delete.php ***
             
           receipt/

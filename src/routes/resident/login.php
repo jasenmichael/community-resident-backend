@@ -31,7 +31,6 @@ $app->post('/resident/login', function ($request, $response) {
             exit();
         }
     }
-
     return $response->withStatus(401)->withJson(array('error' => 'missing or invalid credentials'));
 });
 

@@ -1,4 +1,4 @@
-# Comunity Resident API and Site
+# Community Resident API and Site
 
 #### folder structure
 

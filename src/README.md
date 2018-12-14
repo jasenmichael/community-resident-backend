@@ -21,7 +21,7 @@ api/
       forms/
           work/
             list.php
-            post.php ***
+            post.php
             update.php ***
             delete.php ***
             

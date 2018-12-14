@@ -23,13 +23,15 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 
         '/api/files/documents',
 
-        '/api/forms/work/list'
+        '/api/forms/work/list',
+        '/api/forms/work/post'
     ));
 });
 
 require '../src/routes/resident/login.php';
 require '../src/routes/forms/work/list.php';
 require '../src/routes/forms/work/post.php';
+require '../src/routes/forms/work/update.php';
 
 require '../src/routes/files/archive.php';
 

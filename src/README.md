@@ -11,7 +11,7 @@ api/
     config/
       db.php
     routes/
-      user/
+      resident/
         login.php
         list.php ***
         add.php ***
@@ -23,7 +23,7 @@ api/
             list.php
             post.php
             update.php
-            delete.php ***
+            delete.php
             
           receipt/
             post.php

@@ -24,7 +24,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
         '/api/files/documents',
 
         '/api/forms/work/list',
-        '/api/forms/work/post'
+        '/api/forms/work/post',
+        '/api/forms/work/update',
+        '/api/forms/work/delete/:id'
     ));
 });
 
@@ -32,6 +34,7 @@ require '../src/routes/resident/login.php';
 require '../src/routes/forms/work/list.php';
 require '../src/routes/forms/work/post.php';
 require '../src/routes/forms/work/update.php';
+require '../src/routes/forms/work/delete.php';
 
 require '../src/routes/files/archive.php';
 

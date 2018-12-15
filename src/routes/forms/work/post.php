@@ -50,18 +50,16 @@ $app->post('/forms/work/post', function ($request, $response) {
 
           } catch(PDOException $e){
               echo '{"error": {"text": '.$e->getMessage().'}';
-              exit();
           }
           return $response->withJson($body);
-          exit();
       } else {
           return $response->withJson(array(
               'error' => 'missing fields'
           ));
-          exit();
       }
     }
     return $response->withJson(array('error' => 'invalid token'));
+    $db = null;
     $token = null;
     $passedToken = null;
     $adminToken = null;

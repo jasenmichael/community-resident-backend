@@ -30,13 +30,9 @@ $app->get('/forms/work/list', function ($request, $response) {
         catch(PDOException $e){
             return $response->withJson(array('error' => 'could not access db'));
         }
-        $token = null;
-        $passedToken = null;
-        $adminToken = null;
-        exit();
-
     }
     return $response->withJson(array('error' => 'invalid token'));
+    $db = null;
     $token = null;
     $passedToken = null;
     $adminToken = null;

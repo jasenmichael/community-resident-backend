@@ -3,7 +3,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 // get requires token in the header
-$app->post('/forms/work/update', function ($request, $response) {
+$app->put('/forms/work/update', function ($request, $response) {
     $passedToken = array_values($request->getHeader('token'))[0];
     require_once '../src/config/auth.php';
 
@@ -75,6 +75,7 @@ $app->post('/forms/work/update', function ($request, $response) {
       }
     }
     return $response->withJson(array('error' => 'invalid token'));
+    $db = null;
     $token = null;
     $passedToken = null;
     $adminToken = null;

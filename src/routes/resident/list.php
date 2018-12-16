@@ -20,8 +20,20 @@ $app->post('/residents', function ($request, $response) {
             $statement = $db->query($sql);
             $list = $statement->fetchAll(PDO::FETCH_OBJ);
             $db = null;
-
-            return $response->withJson($list);
+            $residents = [];
+            // echo array_values($list('id'))[0];
+            foreach($list as $resident){
+                $residentInfo = array(
+                    'id' => $resident->id,
+                    'uuid' => $resident->uuid,
+                    'name' => $resident->name,
+                    'email' => $resident->email,
+                    'created_at' => $resident->created_at,
+                    'updated_at' => $resident->updated_at
+                );
+                $residents[] = $residentInfo;
+            }
+            return $response->withJson($residents);
         }
         
         catch(PDOException $e){

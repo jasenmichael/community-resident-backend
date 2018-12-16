@@ -7,7 +7,8 @@ $app->post('/forms/work/post', function ($request, $response) {
     $passedToken = array_values($request->getHeader('token'))[0];
     require_once '../src/config/auth.php';
 
-    if(($token === $passedToken) || ($adminToken === $passedToken)) {
+    if( (password_verify($token, $passedToken)) || (password_verify($adminToken, $passedToken)) ){
+    // if(($token === $passedToken) || ($adminToken === $passedToken)) {
 
       // we could just load the whole body like this,
       // $body = json_decode($request->getBody(), true);
@@ -27,7 +28,7 @@ $app->post('/forms/work/post', function ($request, $response) {
       if (!in_array(null, $body) || !in_array("", $body) ){
           // post body is valid
 
-          $sql = "INSERT INTO work (resident_id,service,date,hours,description,created_at,updated_at) VALUES
+          $sql = "INSERT INTO resident (resident_id,service,date,hours,description,created_at,updated_at) VALUES
           (:resident_id,:service,:date,:hours,:description,:created_at,:updated_at)";
 
           try{

@@ -2,54 +2,84 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-
-
-
-// resident login - requires token requires token - in the form-data body 'or' raw json
 $app->post('/resident/login', function ($request, $response) {
     require '../src/config/auth.php';
-
-    // from body
-    // from form-data or x-www-form-url-encoded
     $body = $request->getParsedBody();
-    // $files = $request->getUploadedFiles();
-
-    // json body
-    // $body = json_decode($request->getBody(), true);
-
     $user = $body['user'];
     $pass = $body['pass'];
-
-    // or from header
-    // $user = array_values($request->getHeader('usr'))[0];
-    // $password = array_values($request->getHeader('pass'))[0];
-    // if($users[$user] === $pass){
-    if(password_verify($pass, $users[$user])){
-
-    // if($users[$user] === $pass){
-
-        if($user === 'admin'){
-            return $response->withJson(array(
-                'token' => $adminTokenHASH,
-                'admin' => true
-                // 'files' => array($files)
-            ));
-            $user = null;
-            $password = null;
+    //if user admin
+    if($user == 'admin'){
+        // verify password
+        if(!password_verify($pass, $users[$user])){
+            return $response->withJson(array('error' => 'invalid password'));
             exit();
         }
-        // if($user === 'gbresident') {
-        else {
-            return $response->withJson(array('token' => $tokenHASH));
-            $user = null;
-            $password = null;
-            exit();
-        }
+        $adminInfo = array(
+            'token' => password_hash($adminToken, PASSWORD_DEFAULT),
+            'id' => 1000,
+            'uuid' => 'admin'
+        );
+        return $response->withJson($adminInfo);
+        exit();
     }
-    return $response->withStatus(401)->withJson(array('error' => 'missing or invalid credentials'));
-});
+    if($user == 'gbresident'){
+        // verify password
+        if(!password_verify($pass, $users[$user])){
+            return $response->withJson(array('error' => 'invalid password'));
+            exit();
+        }
+        $adminInfo = array(
+            'token' => password_hash($token, PASSWORD_DEFAULT),
+            'id' => 1111,
+            'uuid' => 'resident'
+        );
+        return $response->withJson($adminInfo);
+        exit();
+    }
+    
+    // else get from db
+    $sql = "SELECT * FROM resident WHERE uuid = '$user' OR email = '$user'";
+    try{
+        // Get DB Object
+        $db = new db();
+        // Connect
+        $db = $db->connect();
+        $stmt = $db->query($sql);
+        $resident = $stmt->fetch(PDO::FETCH_OBJ);
+        $db = null;
 
-$app->get('/resident/login', function ($request, $response) {
-  require_once '../src/config/config.php';
-  return $response->withStatus(302)->withHeader("Location", $host);
+        if($resident){
+            // check if password is set in db
+            if(!$resident->password){
+                return $response->withJson(array('error' => 'resident exist but password not set'));
+                exit();
+            }
+
+
+            //verify password
+            if(!password_verify($pass, $resident->password)){
+                return $response->withJson(array('error' => 'invalid password'));
+                exit();
+            }
+
+            $residentInfo = array(
+                'token' => password_hash($token, PASSWORD_DEFAULT),
+                'id' => $resident->id,
+                'uuid' => $resident->uuid,
+                'name' => $resident->name,
+                'email' => $resident->email,
+                'created_at' => $resident->created_at,
+                'updated_at' => $resident->updated_at
+            );
+            return $response->withJson($residentInfo);
+            exit();
+        }
+        else {
+            return $response->withJson(array('error' => 'invalid user'));
+            exit();
+        }
+    } catch(PDOException $e){
+        return $response->withJson(array('error' => 'could not access db'));
+        exit();
+    }
 });

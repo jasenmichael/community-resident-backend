@@ -5,28 +5,30 @@ use \Psr\Http\Message\ResponseInterface as Response;
 require '../src/vendor/autoload.php';
 require '../src/config/db.php';
 
+
 $app = new \Slim\App;
 
 $app->get('/', function (Request $request, Response $response, array $args) {
     $name = $args['name'];
-    // $response->getBody()->write("Hello");
+
+    require '../src/config/config.php';
     return $response->withJson(array(
-        '/api/resident/login',
+        $baseDir. '/api/resident/login',
 
-        '/api/files',
+        $baseDir. '/api/files',
 
-        '/api/files/archive',
-        '/api/files/archive/work-credit-submission',
-        '/api/files/archive/receipt-credit-submissions',
-        '/api/files/archive/meeting-minutes',
-        '/api/files/forms',
+        $baseDir. '/api/files/archive',
+        $baseDir. '/api/files/archive/work-credit-submission',
+        $baseDir. '/api/files/archive/receipt-credit-submissions',
+        $baseDir. '/api/files/archive/meeting-minutes',
+        $baseDir. '/api/files/forms',
 
-        '/api/files/documents',
+        $baseDir. '/api/files/documents',
 
-        '/api/forms/work/list',
-        '/api/forms/work/post',
-        '/api/forms/work/update',
-        '/api/forms/work/delete/:id'
+        $baseDir. '/api/forms/work/list',
+        $baseDir. '/api/forms/work/post',
+        $baseDir. '/api/forms/work/update',
+        $baseDir. '/api/forms/work/delete/:id'
     ));
 });
 

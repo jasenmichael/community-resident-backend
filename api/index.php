@@ -32,6 +32,7 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 
 require '../src/routes/resident/login.php';
 require '../src/routes/resident/list.php';
+require '../src/routes/resident/add.php';
 
 require '../src/routes/forms/work/list.php';
 require '../src/routes/forms/work/post.php';

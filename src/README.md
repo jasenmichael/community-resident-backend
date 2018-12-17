@@ -14,7 +14,7 @@ api/
       resident/
         login.php
         list.php
-        add.php ***
+        add.php
         update.php ***
         delete.php ***
 

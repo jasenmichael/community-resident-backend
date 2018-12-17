@@ -2,13 +2,16 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-// list all residents - requires token - in the form-data body 'or' raw json
 $app->post('/residents', function ($request, $response) {
-    // $passedToken = array_values($request->getHeader('token'))[0];
     $body = $request->getParsedBody();
     $passedToken = $body['token'];
     require '../src/config/auth.php';
 
+    if(!$passedToken){
+        return $response->withJson(array('error' => 'token required'));
+        exit();
+    }
+    
     // get local token and compare
     if( ( password_verify($adminToken, $passedToken) ) || ( password_verify($token, $passedToken) ) ){
         $sql = "SELECT * FROM resident";
@@ -34,17 +37,15 @@ $app->post('/residents', function ($request, $response) {
                 $residents[] = $residentInfo;
             }
             return $response->withJson($residents);
+            exit();
         }
         
         catch(PDOException $e){
-            return $response->withJson(array('error' => 'could not access db'));
+            return $response->withJson(array('error' => $e->getMessage()));
+            exit();
         }
     }
     return $response->withJson(array('error' => 'invalid token'));
-    $db = null;
-    $token = null;
-    $passedToken = null;
-    $adminToken = null;
     exit();
 });
 

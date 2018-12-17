@@ -2,45 +2,55 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-// get requires token in the header
+// get requires id in url and token must be json in the body!!!
 $app->delete('/forms/work/delete/{id}', function ($request, $response) {
-    $passedToken = array_values($request->getHeader('token'))[0];
-    require_once '../src/config/auth.php';
+    require '../src/config/auth.php';
+    $body = $request->getParsedBody();
+    $passedToken = $body['token'];
 
-    if(($token === $passedToken) || ($adminToken === $passedToken)) {
-      $id = $request->getAttribute('id');
-      $sql = "DELETE FROM work WHERE id = $id";
-      try{
-        // Get DB Object
-        $db = new db();
-        // Connect
-        $db = $db->connect();
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $count = $stmt->rowCount();
-        $db = null;
-        if($count =='0'){
-          // echo "Failed !";
-          return $response->withJson(array(
-              'error' => $id. ' does not exist'
-          ));
-        }
-        else{
-          // echo "Success !";
-          return $response->withJson(array(
-            'deleted' => $id
-          ));
-        }
-        
+    //check a token was passed
+    if(!$passedToken){
+      return $response->withJson(array('error' => 'token required'));
+      exit();
+    }
+
+    // verify token
+    if( !(password_verify($token, $passedToken)) || (password_verify($adminToken, $passedToken)) ){
+      return $response->withJson(array('error' => 'invalid token'));
+      exit();
+    }
+    
+    // token good letz go yo...
+    $id = $request->getAttribute('id');
+    $sql = "DELETE FROM work WHERE id = $id";
+    try{
+      $db = new db();
+      $db = $db->connect();
+      $stmt = $db->prepare($sql);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $db = null;
+
+      // confirm row was deleted from db
+      if($count == '0'){
+        return $response->withJson(array(
+            'error' => $id. ' does not exist'
+        ));
+        exit();
+      }
+      else{
+        return $response->withJson(array(
+          'deleted' => $id
+        ));
+        exit();
+      }
+      
     } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
+      return $response->withJson(array(
+        'error' => 'could not access db',
+        'message' => $e->getMessage()
+      ));
+      exit();
     }
 
-      return $response->withJson(array('id' => $id));
-    }
-    return $response->withJson(array('error' => 'invalid token'));
-    $token = null;
-    $passedToken = null;
-    $adminToken = null;
-    exit();
 });

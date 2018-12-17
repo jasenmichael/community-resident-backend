@@ -2,16 +2,19 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-// get requires token in the header
+// requires token, id, resident_id, service, date, hours, description in form-date or json body
 $app->put('/forms/work/update', function ($request, $response) {
-    $passedToken = array_values($request->getHeader('token'))[0];
-    require_once '../src/config/auth.php';
+    $passedToken = $request->getParam('token');
+    // $passedToken = array_values($request->getHeader('token'))[0];
 
-    if(($token === $passedToken) || ($adminToken === $passedToken)) {
+    require '../src/config/auth.php';
 
-      // we could just load the whole body like this,
-      // $body = json_decode($request->getBody(), true);
-      // but we want to explicitly construct the object
+    if(!$passedToken){
+        return $response->withJson(array('error' => 'token required'));
+        exit();
+    }
+
+    if( (password_verify($adminToken, $passedToken)) || (password_verify($token, $passedToken)) ){
       $body = array(
           'id' => $request->getParam('id'),
           'resident_id' => $request->getParam('resident_id'),
@@ -19,7 +22,6 @@ $app->put('/forms/work/update', function ($request, $response) {
           'date' => $request->getParam('date'),
           'hours' => $request->getParam('hours'),
           'description' => $request->getParam('description'),
-          'created_at' => $request->getParam('created_at'),
           'updated_at' => date('Y-m-d H:i:s')
       );
   
@@ -33,7 +35,6 @@ $app->put('/forms/work/update', function ($request, $response) {
             date = :date,
             hours = :hours,
             description = :description,
-            created_at = :created_at,
             updated_at = :updated_at
             WHERE id = $id";
 
@@ -48,7 +49,6 @@ $app->put('/forms/work/update', function ($request, $response) {
               $stmt->bindParam(':date', $body['date']);
               $stmt->bindParam(':hours', $body['hours']);
               $stmt->bindParam(':description', $body['description']);
-              $stmt->bindParam(':created_at', $body['created_at']);
               $stmt->bindParam(':updated_at', $body['updated_at']);
               $stmt->execute();
               $count = $stmt->rowCount();

@@ -13,7 +13,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 
     require '../src/config/config.php';
     return $response->withJson(array(
+        $baseDir. '/api/residents',
         $baseDir. '/api/resident/login',
+        $baseDir. '/api/resident/add',
 
         $baseDir. '/api/files',
 

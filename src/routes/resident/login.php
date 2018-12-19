@@ -7,6 +7,13 @@ $app->post('/resident/login', function ($request, $response) {
     $body = $request->getParsedBody();
     $user = $body['user'];
     $pass = $body['pass'];
+
+    if(!$user || !$pass){
+        return $response->withJson(array('error' => 'missing credentials'));
+        exit();
+    }
+
+
     //if user admin
     if($user == 'admin'){
         // verify password

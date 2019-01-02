@@ -6,8 +6,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 $app->put('/forms/work/update', function ($request, $response) {
     $passedToken = $request->getParam('token');
     // $passedToken = array_values($request->getHeader('token'))[0];
-
-    require '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
 
     if(!$passedToken){
         return $response->withJson(array('error' => 'token required'));

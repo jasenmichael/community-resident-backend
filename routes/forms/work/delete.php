@@ -4,7 +4,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 // get requires id in url and token must be json in the body!!!
 $app->delete('/forms/work/delete/{id}', function ($request, $response) {
-    require '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
     $body = $request->getParsedBody();
     $passedToken = $body['token'];
 

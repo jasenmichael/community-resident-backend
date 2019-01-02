@@ -5,10 +5,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 // post requires token in content-form or json body
 $app->post('/forms/work/list', function ($request, $response) {
     // $passedToken = array_values($request->getHeader('token'))[0];
-    require_once '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
     $body = $request->getParsedBody();
     $passedToken = $body['token'];
-    require '../src/config/auth.php';
 
     //check token was passed
     if(!$passedToken){

@@ -1,0 +1,7 @@
+files
+config/auth.php
+config/config.php
+config/db.php
+
+vendor/*
+config/db/*

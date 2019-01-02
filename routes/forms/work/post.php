@@ -5,7 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 // get requires token in the header
 $app->post('/forms/work/post', function ($request, $response) {
     $passedToken = $request->getParam('token');
-    require '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
 
     if(!$passedToken){
         return $response->withJson(array('error' => 'token required'));
@@ -68,7 +68,7 @@ $app->post('/forms/work/post', function ($request, $response) {
     exit();
 });
 
-$app->get('/forms/work/post', function ($request, $response) {
-    require_once '../src/config/config.php';
-    return $response->withStatus(302)->withHeader("Location", $host);
-});
+// $app->get('/forms/work/post', function ($request, $response) {
+//     require_once '../src/config/config.php';
+//     return $response->withStatus(302)->withHeader("Location", $host);
+// });

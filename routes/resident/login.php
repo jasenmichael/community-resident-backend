@@ -2,8 +2,9 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+
 $app->post('/resident/login', function ($request, $response) {
-    require '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
     $body = $request->getParsedBody();
     $user = $body['user'];
     $pass = $body['pass'];

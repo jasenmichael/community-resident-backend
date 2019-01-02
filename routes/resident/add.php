@@ -6,7 +6,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 $app->post('/resident/add', function ($request, $response) {
     $bodyREQ = $request->getParsedBody();
     $passedToken = $bodyREQ['token'];
-    require '../src/config/auth.php';
+    require '../../gb-resident/src/backend/config/auth.php';
+    
 
     if(!$passedToken){
         return $response->withJson(array('error' => 'token required'));
